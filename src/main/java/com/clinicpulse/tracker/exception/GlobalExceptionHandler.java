@@ -2,6 +2,7 @@ package com.clinicpulse.tracker.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(VisitOverlapException.class)
     public ProblemDetail handleVisitOverlap(VisitOverlapException ex) {
         return problem(HttpStatus.CONFLICT, "Visit conflict", ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ProblemDetail handleUnreadableMessage(HttpMessageNotReadableException ex) {
+        return problem(HttpStatus.BAD_REQUEST, "Invalid request", "Request body contains invalid or malformed data");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -127,4 +127,22 @@ class VisitControllerTest {
                 .andExpect(jsonPath("$.title")
                         .value("Visit conflict"));
     }
+
+    @Test
+    void shouldReturnBadRequestForInvalidDateFormat() throws Exception {
+        final var content = """
+                            {
+                              "start": "10 August 2026",
+                              "end": "2026-08-10 15:45",
+                              "patientId": 1,
+                              "doctorId": 2
+                            }
+                            """;
+        mockMvc.perform(post("/visits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title")
+                        .value("Invalid request"));
+    }
 }
