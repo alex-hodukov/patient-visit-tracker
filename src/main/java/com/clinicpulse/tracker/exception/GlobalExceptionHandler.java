@@ -14,14 +14,17 @@ public class GlobalExceptionHandler {
         return problem(HttpStatus.NOT_FOUND, "Patient not found", ex.getMessage());
     }
 
+    @ExceptionHandler(DoctorNotFoundException.class)
     public ProblemDetail handleDoctorNotFound(DoctorNotFoundException ex) {
         return problem(HttpStatus.NOT_FOUND, "Doctor not found", ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidVisitIntervalException.class)
     public ProblemDetail handleInvalidVisitInterval(InvalidVisitIntervalException ex) {
         return problem(HttpStatus.BAD_REQUEST, "Invalid visit interval", ex.getMessage());
     }
 
+    @ExceptionHandler(VisitOverlapException.class)
     public ProblemDetail handleVisitOverlap(VisitOverlapException ex) {
         return problem(HttpStatus.CONFLICT, "Visit conflict", ex.getMessage());
     }
