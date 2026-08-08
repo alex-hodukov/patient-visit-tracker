@@ -10,16 +10,14 @@ import java.time.LocalDateTime;
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     @Query(value = """
-           SELECT EXISTS (
-                SELECT 1
-                FROM visits
-                WHERE doctor_id = :doctorId
-                  AND start_datetime_utc < :end
-                  AND end_datetime_utc > :start
-            )
-            """, nativeQuery = true)
+           SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END
+           FROM Visit v
+           WHERE v.doctor.id = :doctorId
+                AND v.startDateTimeUtc < :end
+                AND v.endDateTimeUtc > :start
+           """)
     boolean existsOverlappingVisit(
-            @Param("id") Long doctorId,
+            @Param("doctorId") Long doctorId,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
 }
